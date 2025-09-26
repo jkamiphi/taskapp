@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { AuthPage } from '../components/AuthPage';
+import { Header } from '../components/Header';
+import { TaskList } from '../components/TaskList';
 import { useAuth } from '../contexts/AuthContext';
 
 export function meta() {
@@ -10,13 +11,13 @@ export function meta() {
   ];
 }
 
-export default function Home() {
+export default function Dashboard() {
   const { isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && isAuthenticated) {
-      navigate('/dashboard');
+    if (!loading && !isAuthenticated) {
+      navigate('/');
     }
   }, [isAuthenticated, loading, navigate]);
 
@@ -28,9 +29,16 @@ export default function Home() {
     );
   }
 
-  if (isAuthenticated) {
+  if (!isAuthenticated) {
     return null;
   }
 
-  return <AuthPage />;
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <Header />
+      <main>
+        <TaskList />
+      </main>
+    </div>
+  );
 }
