@@ -101,6 +101,19 @@ services:
             - '/dev/shm:/dev/shm'
         networks:
             - sail
+
+    frontend:
+        build:
+            context: './frontend'
+            dockerfile: Dockerfile
+        image: 'frontend-app'
+        ports:
+            - '${FRONTEND_PORT:-3000}:3000'
+        volumes:
+            - './frontend:/usr/src/app'
+        networks:
+            - sail
+
 networks:
     sail:
         driver: bridge
