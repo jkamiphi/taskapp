@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,7 +19,9 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'nickname',
+        'first_name',
+        'last_name',
         'email',
         'password',
     ];
@@ -49,5 +52,12 @@ class User extends Authenticatable
     public function tasks()
     {
         return $this->hasMany(Task::class);
+    }
+
+    protected function fullName(): Attribute
+    {
+        return new Attribute(
+            get: fn() => "{$this->first_name} {$this->last_name}"
+        );
     }
 }
