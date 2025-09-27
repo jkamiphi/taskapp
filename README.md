@@ -1,61 +1,307 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Aplicación de Gestión de Tareas
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Una aplicación moderna de gestión de tareas construida con Laravel y con un servicio frontend separado. Esta aplicación permite a los usuarios gestionar sus tareas con operaciones CRUD completas, autenticación de usuarios y una interfaz API limpia.
 
-## About Laravel
+## Stack Tecnológico
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Backend
+- **PHP**: ^8.2
+- **Laravel Framework**: ^12.31.1
+- **MySQL**: 8.0
+- **Redis**: Última versión
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Frontend
+- **Node.js**: 22
+- **Vite**: Última versión (herramienta de construcción)
+- **Framework Frontend**: Configurado vía Vite
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Herramientas de Desarrollo
+- **Docker**: Vía Laravel Sail
+- **Composer**: Para gestión de dependencias PHP
+- **PHPUnit**: ^11.5.3 (para testing)
+- **Laravel Pint**: ^1.25.1 (formateo de código)
+- **Mockery**: ^1.6 (para mocking en tests)
+- **Faker**: ^1.23 (para generar datos de prueba)
 
-## Learning Laravel
+## Prerrequisitos
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Docker y Docker Compose
+- Git
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Instalación y Configuración
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 1. Clonar el Repositorio
+```bash
+git clone <url-del-repositorio>
+cd taskapp
+```
 
-## Laravel Sponsors
+### 2. Configuración del Entorno
+```bash
+# Copiar el archivo de entorno
+cp .env.example .env
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+# Generar clave de aplicación
+./vendor/bin/sail artisan key:generate
+```
 
-### Premium Partners
+### 3. Configurar Variables de Entorno
+Edita el archivo `.env` con tu configuración específica. Variables clave incluyen:
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```env
+APP_NAME=Laravel
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost
 
-## Contributing
+# Configuración de Base de Datos (MySQL vía Docker)
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel
+DB_USERNAME=sail
+DB_PASSWORD=password
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Configuración Frontend
+FRONTEND_PORT=3000
+API_BASE_URL=http://laravel.test
+```
 
-## Code of Conduct
+### 4. Iniciar Servicios Docker
+```bash
+# Iniciar todos los servicios (MySQL, Redis, Meilisearch, Mailpit, etc.)
+./vendor/bin/sail up -d
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# O usar el alias después de la primera ejecución
+alias sail='vendor/bin/sail'
+sail up -d
+```
 
-## Security Vulnerabilities
+### 5. Instalar Dependencias
+```bash
+# Instalar dependencias PHP
+sail composer install
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Instalar dependencias Node.js para frontend
+cd frontend
+npm install
+cd ..
+```
 
-## License
+### 6. Configuración de Base de Datos
+```bash
+# Ejecutar migraciones de base de datos
+sail artisan migrate
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Poblar la base de datos con datos de ejemplo
+sail artisan db:seed
+
+# Opcional: Ejecutar seeders específicos
+sail artisan db:seed --class=DatabaseSeeder
+sail artisan db:seed --class=DemoSeeder
+```
+
+## Servidores de Desarrollo
+
+### Iniciar Todos los Servicios de Desarrollo
+```bash
+# Usar el comando conveniente de desarrollo que inicia todos los servicios
+sail composer dev
+```
+
+Este comando inicia:
+- Servidor de desarrollo Laravel (puerto 80)
+- Worker de colas
+- Monitoreo de logs (Laravel Pail)
+- Servidor de desarrollo frontend (puerto 3000)
+
+### Iniciar Servicios Individualmente
+
+#### Solo Backend
+```bash
+sail artisan serve
+```
+
+#### Solo Frontend
+```bash
+cd frontend
+npm run dev
+```
+
+#### Worker de Colas
+```bash
+sail artisan queue:work
+```
+
+#### Monitoreo de Logs
+```bash
+sail artisan pail --timeout=0
+```
+
+## Pruebas
+
+### Ejecutar Todas las Pruebas
+```bash
+# Limpiar caché de configuración y ejecutar pruebas
+sail composer test
+
+# O manualmente
+sail artisan config:clear
+sail artisan test
+```
+
+### Ejecutar Suites de Pruebas Específicas
+```bash
+# Ejecutar pruebas de características
+sail artisan test --testsuite=Feature
+
+# Ejecutar pruebas unitarias
+sail artisan test --testsuite=Unit
+```
+
+## Endpoints de API
+
+La aplicación proporciona endpoints API RESTful para gestión de tareas:
+
+- `GET /api/tasks` - Listar todas las tareas
+- `POST /api/tasks` - Crear una nueva tarea
+- `GET /api/tasks/{id}` - Obtener una tarea específica
+- `PUT /api/tasks/{id}` - Actualizar una tarea
+- `DELETE /api/tasks/{id}` - Eliminar una tarea
+
+Endpoints de autenticación (si se usa Laravel Sanctum):
+- `POST /api/register` - Registro de usuario
+- `POST /api/login` - Inicio de sesión de usuario
+- `POST /api/logout` - Cierre de sesión de usuario
+
+## Esquema de Base de Datos
+
+### Tabla Users
+- `id` - Clave primaria
+- `name` - Nombre del usuario
+- `email` - Email del usuario (único)
+- `password` - Contraseña encriptada
+- Timestamps
+
+### Tabla Tasks
+- `id` - Clave primaria
+- `title` - Título de la tarea
+- `description` - Descripción de la tarea
+- `completed` - Estado booleano
+- `due_date` - Fecha de vencimiento opcional
+- `user_id` - Clave foránea a tabla users
+- Timestamps
+
+## Estructura del Proyecto
+
+```
+├── app/
+│   ├── Http/Controllers/    # Controladores API
+│   ├── Models/             # Modelos Eloquent (User, Task)
+│   └── Providers/          # Proveedores de Servicio
+├── config/                 # Archivos de configuración
+├── database/
+│   ├── factories/          # Factorías de Modelo
+│   ├── migrations/         # Migraciones de base de datos
+│   └── seeders/           # Seeders de base de datos
+├── frontend/              # Aplicación frontend
+├── routes/                # Rutas API y web
+├── tests/                 # Archivos de prueba
+└── docker/               # Configuración Docker
+```
+
+## Comandos Disponibles
+
+### Scripts de Composer
+```bash
+# Iniciar entorno de desarrollo
+sail composer dev
+
+# Ejecutar pruebas
+sail composer test
+
+# Formatear código
+sail composer format
+```
+
+### Comandos Artisan
+```bash
+# Operaciones de base de datos
+sail artisan migrate
+sail artisan migrate:fresh --seed
+sail artisan db:seed
+
+# Gestión de colas
+sail artisan queue:work
+sail artisan queue:listen
+
+# Monitoreo de logs
+sail artisan pail
+
+# Gestión de caché
+sail artisan config:clear
+sail artisan route:clear
+sail artisan view:clear
+```
+
+## Consideraciones Especiales
+
+### Servicios Docker
+La aplicación usa Laravel Sail para orquestación Docker, que incluye:
+- **MySQL 8.0**: Base de datos principal
+- **Redis**: Almacenamiento de caché y sesiones
+- **Meilisearch**: Capacidades de búsqueda de texto completo
+- **Mailpit**: Prueba de emails durante desarrollo
+- **Selenium**: Para pruebas de navegador
+
+### Integración Frontend
+- El frontend corre como un servicio separado en el puerto 3000
+- La comunicación API se configura vía variable de entorno `API_BASE_URL`
+- Las peticiones cross-origin se manejan por la configuración CORS
+
+### Flujo de Trabajo de Desarrollo
+- Usa `sail composer dev` para iniciar todos los servicios simultáneamente
+- La aplicación soporta hot-reloading para backend y frontend
+- El procesamiento de colas se maneja automáticamente en modo desarrollo
+- El monitoreo de logs proporciona información en tiempo real de la aplicación
+
+### Entorno de Pruebas
+- Las pruebas usan base de datos SQLite en memoria por defecto
+- Las clases Factory proporcionan datos de prueba realistas
+- Mockery está disponible para mocking de servicios
+- La configuración PHPUnit incluye capacidades de cobertura de código
+
+### Consideraciones de Producción
+- Actualizar `.env` para entorno de producción
+- Usar credenciales de base de datos apropiadas
+- Configurar Redis para almacenamiento de sesión y caché
+- Configurar workers de cola apropiados
+- Configurar servicio de mail para notificaciones
+- Habilitar modo de mantenimiento de Laravel para despliegues
+
+## Resolución de Problemas
+
+### Problemas Comunes
+
+1. **Conflictos de puertos**: Asegurar que los puertos 80, 3000, 3306, 6379 estén disponibles
+2. **Problemas de permisos**: Ejecutar `sail shell` y arreglar permisos de archivos si es necesario
+3. **Conexión de base de datos**: Verificar que el contenedor MySQL esté corriendo con `sail ps`
+4. **Frontend no carga**: Verificar si las dependencias Node.js están instaladas
+
+### Comandos Útiles
+```bash
+# Verificar estado de servicios
+sail ps
+
+# Ver logs
+sail logs laravel.test
+sail logs mysql
+
+# Acceder al shell del contenedor
+sail shell
+
+# Reiniciar todo
+sail down -v
+sail up -d
+sail artisan migrate:fresh --seed
+```
