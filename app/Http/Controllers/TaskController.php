@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTaskRequest;
+use App\Http\Requests\GenerateTasksWithAIRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Services\GeminiTaskService;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -54,5 +56,20 @@ class TaskController extends Controller
         $task->delete();
 
         return response()->json(null, 204);
+    }
+
+    public function generateWithAI(GenerateTasksWithAIRequest $request, GeminiTaskService $taskService)
+    {
+        $data = $request->validated();
+        $user = $request->user();
+
+        $tasks = $taskService->generateTasks($data['topic']);
+
+        $createdTasks = [];
+        foreach ($tasks as $taskData) {
+            $createdTasks[] = $user->tasks()->create($taskData);
+        }
+
+        return response()->json($createdTasks, 201);
     }
 }

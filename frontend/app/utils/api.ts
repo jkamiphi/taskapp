@@ -166,6 +166,13 @@ export class ApiClient {
     async getTask(id: number): Promise<Task> {
         return this.request(`/tasks/${id}`);
     }
+
+    async generateWithAi(topic: string): Promise<Task[]> {
+        return this.request("/tasks/generate-with-ai", {
+            method: "POST",
+            body: JSON.stringify({ topic }),
+        });
+    }
 }
 
 // Types

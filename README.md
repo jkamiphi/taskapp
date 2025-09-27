@@ -65,6 +65,9 @@ DB_PASSWORD=password
 # Configuración Frontend
 FRONTEND_PORT=3000
 API_BASE_URL=http://laravel.test
+
+# Configuracion Gemini
+GEMINI_API_KEY=tu_api_key_aqui
 ```
 
 ### 4. Iniciar Servicios Docker
@@ -110,9 +113,7 @@ sail composer dev
 
 Este comando inicia:
 - Servidor de desarrollo Laravel (puerto 80)
-- Worker de colas
 - Monitoreo de logs (Laravel Pail)
-- Servidor de desarrollo frontend (puerto 3000)
 
 ### Iniciar Servicios Individualmente
 
@@ -167,6 +168,7 @@ La aplicación proporciona endpoints API RESTful para gestión de tareas:
 - `GET /api/tasks/{id}` - Obtener una tarea específica
 - `PUT /api/tasks/{id}` - Actualizar una tarea
 - `DELETE /api/tasks/{id}` - Eliminar una tarea
+- `POST /api/tasks/generate-with-ai` - Generar tareas usando IA (requiere tema en el cuerpo)
 
 Endpoints de autenticación (si se usa Laravel Sanctum):
 - `POST /api/register` - Registro de usuario
@@ -198,6 +200,7 @@ Endpoints de autenticación (si se usa Laravel Sanctum):
 │   ├── Http/Controllers/    # Controladores API
 │   ├── Models/             # Modelos Eloquent (User, Task)
 │   └── Providers/          # Proveedores de Servicio
+|   └── Services/           # Servicios personalizados (e.g., GeminiTaskService)
 ├── config/                 # Archivos de configuración
 ├── database/
 │   ├── factories/          # Factorías de Modelo
@@ -230,10 +233,6 @@ sail artisan migrate
 sail artisan migrate:fresh --seed
 sail artisan db:seed
 
-# Gestión de colas
-sail artisan queue:work
-sail artisan queue:listen
-
 # Monitoreo de logs
 sail artisan pail
 
@@ -248,10 +247,7 @@ sail artisan view:clear
 ### Servicios Docker
 La aplicación usa Laravel Sail para orquestación Docker, que incluye:
 - **MySQL 8.0**: Base de datos principal
-- **Redis**: Almacenamiento de caché y sesiones
-- **Meilisearch**: Capacidades de búsqueda de texto completo
 - **Mailpit**: Prueba de emails durante desarrollo
-- **Selenium**: Para pruebas de navegador
 
 ### Integración Frontend
 - El frontend corre como un servicio separado en el puerto 3000
@@ -264,18 +260,10 @@ La aplicación usa Laravel Sail para orquestación Docker, que incluye:
 - El procesamiento de colas se maneja automáticamente en modo desarrollo
 - El monitoreo de logs proporciona información en tiempo real de la aplicación
 
-### Entorno de Pruebas
-- Las pruebas usan base de datos SQLite en memoria por defecto
-- Las clases Factory proporcionan datos de prueba realistas
-- Mockery está disponible para mocking de servicios
-- La configuración PHPUnit incluye capacidades de cobertura de código
 
 ### Consideraciones de Producción
 - Actualizar `.env` para entorno de producción
 - Usar credenciales de base de datos apropiadas
-- Configurar Redis para almacenamiento de sesión y caché
-- Configurar workers de cola apropiados
-- Configurar servicio de mail para notificaciones
 - Habilitar modo de mantenimiento de Laravel para despliegues
 
 ## Resolución de Problemas
