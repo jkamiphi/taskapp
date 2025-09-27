@@ -19,5 +19,15 @@ class DemoSeeder extends Seeder
         User::factory(10)->create()->each(function ($user) {
             $user->tasks()->saveMany(Task::factory(rand(1, 5))->make());
         });
+
+        User::factory()->create([
+            'nickname' => 'demo.user',
+            'first_name' => 'Demo',
+            'last_name' => 'User',
+            'email' => 'demo@example.com',
+            'password' => bcrypt('password'),
+        ])->each(function ($user) {
+            $user->tasks()->saveMany(Task::factory(5)->make());
+        });
     }
 }

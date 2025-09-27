@@ -97,7 +97,6 @@ sail artisan migrate
 sail artisan db:seed
 
 # Opcional: Ejecutar seeders específicos
-sail artisan db:seed --class=DatabaseSeeder
 sail artisan db:seed --class=DemoSeeder
 ```
 
