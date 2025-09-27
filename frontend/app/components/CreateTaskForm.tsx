@@ -3,7 +3,7 @@ import { apiClient } from '../utils/api';
 import type { Task } from '../utils/api';
 
 interface CreateTaskFormProps {
-  onTaskCreated: (task: Task) => void;
+  onTaskCreated: () => void;
   onCancel: () => void;
 }
 
@@ -33,8 +33,8 @@ export function CreateTaskForm({ onTaskCreated, onCancel }: CreateTaskFormProps)
         due_date: formData.due_date || undefined,
       };
       
-      const newTask = await apiClient.createTask(taskData);
-      onTaskCreated(newTask);
+      await apiClient.createTask(taskData);
+      onTaskCreated();
       setFormData({ title: '', description: '', due_date: '' });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al crear la tarea');

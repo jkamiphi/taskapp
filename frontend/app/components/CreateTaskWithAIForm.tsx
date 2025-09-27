@@ -3,7 +3,7 @@ import { apiClient } from '../utils/api';
 import type { Task } from '../utils/api';
 
 interface CreateTaskWithAIFormProps {
-  onTasksCreated: (tasks: Task[]) => void;
+  onTasksCreated: () => void;
   onCancel: () => void;
 }
 
@@ -25,9 +25,9 @@ export function CreateTaskWithAIForm({ onTasksCreated, onCancel }: CreateTaskWit
     setError('');
 
     try {
-      const newTasks = await apiClient.generateWithAi(formData.topic);
+      await apiClient.generateWithAi(formData.topic);
 
-      onTasksCreated(newTasks);
+      onTasksCreated();
       setFormData({ topic: '' });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al generar las tareas');
