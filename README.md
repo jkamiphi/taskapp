@@ -281,7 +281,7 @@ La aplicación usa Laravel Sail para orquestación Docker, que incluye:
 sail ps
 
 # Ver logs
-sail logs laravel.test
+sail logs api
 sail logs mysql
 
 # Acceder al shell del contenedor

@@ -9,6 +9,7 @@ export class ApiError extends Error {
 
 export class ApiClient {
     private baseURL: string;
+    private csrfInitialized: boolean;
 
     constructor(baseURL: string | undefined = API_BASE_URL) {
         if (!baseURL) {
@@ -16,6 +17,18 @@ export class ApiClient {
         }
 
         this.baseURL = baseURL;
+        this.csrfInitialized = false;
+    }
+
+    async initializeCsrf() {
+        const csrfUrl =
+            this.baseURL.replace(/\/api$/, "") + "/sanctum/csrf-cookie";
+        if (!this.csrfInitialized) {
+            await fetch(csrfUrl, {
+                credentials: "include",
+            });
+            this.csrfInitialized = true;
+        }
     }
 
     private getToken(): string | null {
@@ -34,6 +47,8 @@ export class ApiClient {
         endpoint: string,
         options: RequestInit = {}
     ): Promise<T> {
+        await this.initializeCsrf();
+
         const url = `${this.baseURL}${endpoint}`;
         const token = this.getToken();
 
@@ -45,6 +60,7 @@ export class ApiClient {
                 ...options.headers,
             },
             ...options,
+            credentials: "include",
         };
 
         try {
