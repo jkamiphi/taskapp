@@ -8,6 +8,7 @@ import {
 } from "react-router";
 import { AuthProvider } from './contexts/AuthContext';
 import "./app.css";
+import { Toaster } from "sonner";
 
 export const links = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -31,10 +32,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <ScrollRestoration />
         <Scripts />
+        <Toaster />
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { apiClient } from '../utils/api';
-import type { Task } from '../utils/api';
+import { toast } from 'sonner';
 
 interface CreateTaskFormProps {
   onTaskCreated: () => void;
@@ -14,17 +14,15 @@ export function CreateTaskForm({ onTaskCreated, onCancel }: CreateTaskFormProps)
     due_date: '',
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title.trim()) {
-      setError('El título es obligatorio');
+      toast.error('El título es obligatorio');
       return;
     }
 
     setLoading(true);
-    setError('');
 
     try {
       const taskData = {
@@ -37,7 +35,7 @@ export function CreateTaskForm({ onTaskCreated, onCancel }: CreateTaskFormProps)
       onTaskCreated();
       setFormData({ title: '', description: '', due_date: '' });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear la tarea');
+      toast.error(err instanceof Error ? err.message : 'Error al crear la tarea');
     } finally {
       setLoading(false);
     }
@@ -102,12 +100,6 @@ export function CreateTaskForm({ onTaskCreated, onCancel }: CreateTaskFormProps)
             className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
-
-        {error && (
-          <div className="p-3 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg">
-            <div className="text-red-700 dark:text-red-200 text-sm">{error}</div>
-          </div>
-        )}
 
         <div className="flex gap-3">
           <button

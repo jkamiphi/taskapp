@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { toast } from 'sonner';
 
 interface RegisterFormProps {
   onSwitchToLogin: () => void;
@@ -13,22 +14,20 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
     password: '',
     password_confirmation: '',
   });
-  const [error, setError] = useState<string>('');
   const { register, loading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
     
     if (formData.password !== formData.password_confirmation) {
-      setError('Las contraseñas no coinciden');
+      toast.error('Las contraseñas no coinciden');
       return;
     }
 
     try {
       await register(formData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al registrarse');
+      toast.error(err instanceof Error ? err.message : 'Error al registrarse');
     }
   };
 
@@ -133,14 +132,6 @@ export function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
               />
             </div>
           </div>
-
-          {error && (
-            <div className="rounded-md bg-red-50 dark:bg-red-900 p-4">
-              <div className="text-sm text-red-700 dark:text-red-200">
-                {error}
-              </div>
-            </div>
-          )}
 
           <div>
             <button

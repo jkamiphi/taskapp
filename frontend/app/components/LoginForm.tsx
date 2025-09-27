@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { toast } from 'sonner';
 
 interface LoginFormProps {
   onSwitchToRegister: () => void;
@@ -10,17 +11,15 @@ export function LoginForm({ onSwitchToRegister }: LoginFormProps) {
     email: '',
     password: '',
   });
-  const [error, setError] = useState<string>('');
   const { login, loading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
     
     try {
       await login(formData.email, formData.password);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Un error ha ocurrido al iniciar sesión');
+      toast.error(err instanceof Error ? err.message : 'Un error ha ocurrido al iniciar sesión');
     }
   };
 
@@ -75,14 +74,6 @@ export function LoginForm({ onSwitchToRegister }: LoginFormProps) {
               />
             </div>
           </div>
-
-          {error && (
-            <div className="rounded-md bg-red-50 dark:bg-red-900 p-4">
-              <div className="text-sm text-red-700 dark:text-red-200">
-                {error}
-              </div>
-            </div>
-          )}
 
           <div>
             <button

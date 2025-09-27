@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { AuthPage } from '../components/AuthPage';
 import { useAuth } from '../contexts/AuthContext';
+import { LoginForm } from '~/components/LoginForm';
+import { RegisterForm } from '~/components/RegisterForm';
 
 export function meta() {
   return [
@@ -12,6 +13,7 @@ export function meta() {
 
 export default function Home() {
   const { isAuthenticated, loading } = useAuth();
+  const [isLoginState, setIsLoginState] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,5 +34,9 @@ export default function Home() {
     return null;
   }
 
-  return <AuthPage />;
+  return isLoginState ? (
+    <LoginForm onSwitchToRegister={() => setIsLoginState(false)} />
+  ) : (
+    <RegisterForm onSwitchToLogin={() => setIsLoginState(true)} />
+  );
 }

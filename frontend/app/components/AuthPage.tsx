@@ -2,12 +2,16 @@ import { useState } from 'react';
 import { LoginForm } from './LoginForm';
 import { RegisterForm } from './RegisterForm';
 
-export function AuthPage() {
-  const [isLogin, setIsLogin] = useState(true);
+interface AuthPageProps {
+  isLogin?: boolean;
+}
 
-  return isLogin ? (
-    <LoginForm onSwitchToRegister={() => setIsLogin(false)} />
+export function AuthPage({ isLogin }: AuthPageProps) {
+  const [isLoginState, setIsLoginState] = useState(isLogin ?? true);
+
+  return isLoginState ? (
+    <LoginForm onSwitchToRegister={() => setIsLoginState(false)} />
   ) : (
-    <RegisterForm onSwitchToLogin={() => setIsLogin(true)} />
+    <RegisterForm onSwitchToLogin={() => setIsLoginState(true)} />
   );
 }

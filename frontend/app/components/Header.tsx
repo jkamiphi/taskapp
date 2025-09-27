@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { useAuth } from '../contexts/AuthContext';
 
 export function Header() {
@@ -7,7 +8,7 @@ export function Header() {
     try {
       await logout();
     } catch (err) {
-      console.error('Logout error:', err);
+      toast.error(`Logout error: ${err instanceof Error ? err.message : 'Un error ha ocurrido al cerrar sesión'}`);
     }
   };
 

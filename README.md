@@ -63,8 +63,12 @@ DB_USERNAME=sail
 DB_PASSWORD=password
 
 # Configuración Frontend
+FRONTEND_URL=http://localhost:3000
 FRONTEND_PORT=3000
-API_BASE_URL=http://laravel.test
+VITE_PORT=5173
+API_BASE_URL=http://localhost/api
+CORS_ALLOWED_ORIGINS=
+SANCTUM_STATEFUL_DOMAINS=localhost:3000,localhost,127.0.0.1:3000,127.0.0.1
 
 # Configuracion Gemini
 GEMINI_API_KEY=tu_api_key_aqui

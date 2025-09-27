@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { apiClient } from '../utils/api';
-import type { Task } from '../utils/api';
+import { toast } from 'sonner';
 
 interface CreateTaskWithAIFormProps {
   onTasksCreated: () => void;
@@ -12,17 +12,15 @@ export function CreateTaskWithAIForm({ onTasksCreated, onCancel }: CreateTaskWit
     topic: ''
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.topic.trim()) {
-      setError('La descripción es obligatoria');
+      toast.error('La descripción es obligatoria');
       return;
     }
 
     setLoading(true);
-    setError('');
 
     try {
       await apiClient.generateWithAi(formData.topic);
@@ -30,7 +28,7 @@ export function CreateTaskWithAIForm({ onTasksCreated, onCancel }: CreateTaskWit
       onTasksCreated();
       setFormData({ topic: '' });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al generar las tareas');
+      toast.error(err instanceof Error ? err.message : 'Error al generar las tareas');
     } finally {
       setLoading(false);
     }
@@ -65,12 +63,6 @@ export function CreateTaskWithAIForm({ onTasksCreated, onCancel }: CreateTaskWit
             placeholder="Describe el tema o contexto para generar tareas... (Ej: 'Planificar la fiesta de cumpleaños')"
           />
         </div>
-
-        {error && (
-          <div className="p-3 bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg">
-            <div className="text-red-700 dark:text-red-200 text-sm">{error}</div>
-          </div>
-        )}
 
         <div className="flex gap-3">
           <button
