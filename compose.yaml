@@ -1,5 +1,5 @@
 services:
-    laravel:
+    laravel.test:
         build:
             context: './docker/8.4'
             dockerfile: Dockerfile
@@ -64,7 +64,7 @@ services:
         networks:
             - sail
         depends_on:
-            - api
+            - laravel.test
 
 networks:
     sail:
