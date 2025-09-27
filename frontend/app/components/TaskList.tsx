@@ -123,18 +123,18 @@ export function TaskList() {
           </select>
 
           <select
-            value={`${filters.sort}_${filters.dir}`}
+            value={`${filters.sort}:${filters.dir}`}
             onChange={(e) => {
-              const [sort, dir] = e.target.value.split('_');
+              const [sort, dir] = e.target.value.split(':');
               handleFilterChange('sort', sort);
               handleFilterChange('dir', dir);
             }}
             className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
           >
-            <option value="created_at_desc">Más Reciente Primero</option>
-            <option value="created_at_asc">Más Antiguo Primero</option>
-            <option value="due_date_asc">Fecha de Vencimiento (Más Cercana)</option>
-            <option value="due_date_desc">Fecha de Vencimiento (Más Lejana)</option>
+            <option value="created_at:desc">Más Reciente Primero</option>
+            <option value="created_at:asc">Más Antiguo Primero</option>
+            <option value="due_date:asc">Fecha de Vencimiento (Más Cercana)</option>
+            <option value="due_date:desc">Fecha de Vencimiento (Más Lejana)</option>
           </select>
         </div>
 
