@@ -21,14 +21,8 @@ export class ApiClient {
     }
 
     async initializeCsrf() {
-        const csrfUrl =
-            this.baseURL.replace(/\/api$/, "") + "/sanctum/csrf-cookie";
-        if (!this.csrfInitialized) {
-            await fetch(csrfUrl, {
-                credentials: "include",
-            });
-            this.csrfInitialized = true;
-        }
+        // Skip CSRF for Bearer token authentication
+        this.csrfInitialized = true;
     }
 
     private getToken(): string | null {
@@ -60,7 +54,6 @@ export class ApiClient {
                 ...options.headers,
             },
             ...options,
-            credentials: "include",
         };
 
         try {
