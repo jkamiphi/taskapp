@@ -2,6 +2,8 @@
 
 Una aplicación moderna de gestión de tareas construida con Laravel y con un servicio frontend separado. Esta aplicación permite a los usuarios gestionar sus tareas con operaciones CRUD completas, autenticación de usuarios y una interfaz API limpia.
 
+![Screencast de la aplicación](assets/screencast.gif)
+
 ## Stack Tecnológico
 
 ### Backend
